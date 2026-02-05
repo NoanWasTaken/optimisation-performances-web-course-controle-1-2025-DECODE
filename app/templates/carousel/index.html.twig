@@ -17,12 +17,12 @@
 		</div>
 		<div class="flex flex-col items-center justify-center w-5/12 space-y-6">
 			
-			<img src="{{asset('img/' ~ item.files[0].filename_disk)}}" class="w-full h-[640px] object-cover">
+			<img src="{{ ('img/' ~ item.modele.files[0].filename_disk|replace({'.JPG': '.webp', '.jpg': '.webp', '.jpeg': '.webp', '.png': '.webp'})) | imagine_filter('carousel_main') }}" class="w-full h-[640px] object-cover" width="800" height="640" loading="{{ loop.first ? 'eager' : 'lazy' }}" alt="{{ item.title | striptags }}">
 
 			<div class="flex flex-row items-center justify-center space-x-6">
-				{% for file in item.files %}
+				{% for file in item.modele.files %}
 					{% if loop.index0 != 0 %}
-						<img src="{{asset('img/' ~ file.filename_disk)}}" class="w-full max-h-14 object-cover">
+						<img src="{{ ('img/' ~ file.filename_disk|replace({'.JPG': '.webp', '.jpg': '.webp', '.jpeg': '.webp', '.png': '.webp'})) | imagine_filter('carousel_thumb') }}" class="w-full max-h-14 object-cover" width="100" height="60" loading="lazy" alt="Thumbnail">
 					{% endif%}
 				{% endfor%}
 			</div>

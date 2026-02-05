@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ModelesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ModelesRepository::class)]
@@ -53,6 +55,17 @@ class Modeles
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $page = null;
+
+    #[ORM\ManyToMany(targetEntity: DirectusFiles::class)]
+    #[ORM\JoinTable(name: 'modeles_files')]
+    #[ORM\JoinColumn(name: 'modeles_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'directus_files_id', referencedColumnName: 'id')]
+    private Collection $files;
+
+    public function __construct()
+    {
+        $this->files = new ArrayCollection();
+    }
 
     public function getId(): ?string
     {
@@ -223,6 +236,27 @@ class Modeles
     public function setPage(?string $page): static
     {
         $this->page = $page;
+
+        return $this;
+    }
+
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(DirectusFiles $file): static
+    {
+        if (!$this->files->contains($file)) {
+            $this->files->add($file);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(DirectusFiles $file): static
+    {
+        $this->files->removeElement($file);
 
         return $this;
     }

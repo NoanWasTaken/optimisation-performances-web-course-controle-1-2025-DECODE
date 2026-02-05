@@ -16,6 +16,17 @@ class GalaxyRepository extends ServiceEntityRepository
         parent::__construct($registry, Galaxy::class);
     }
 
+    public function findAllWithRelations(): array
+    {
+        return $this->createQueryBuilder('g')
+            ->leftJoin('g.modele', 'm')
+            ->addSelect('m')
+            ->leftJoin('m.files', 'f')
+            ->addSelect('f')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Galaxy[] Returns an array of Galaxy objects
     //     */

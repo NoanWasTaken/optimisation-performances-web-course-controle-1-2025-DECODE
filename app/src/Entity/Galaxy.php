@@ -30,8 +30,9 @@ class Galaxy
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $date_updated = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $modele = null;
+    #[ORM\ManyToOne(targetEntity: Modeles::class)]
+    #[ORM\JoinColumn(name: 'modele', referencedColumnName: 'id')]
+    private ?Modeles $modele = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -116,12 +117,12 @@ class Galaxy
         return $this;
     }
 
-    public function getModele(): ?string
+    public function getModele(): ?Modeles
     {
         return $this->modele;
     }
 
-    public function setModele(string $modele): static
+    public function setModele(?Modeles $modele): static
     {
         $this->modele = $modele;
 
